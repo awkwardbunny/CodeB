@@ -24,6 +24,26 @@ def status_parser(status):
 	data['wormholes'] = [tokens[winfo_start+5*i+1:winfo_start+5*i+6] for i in range(num_wormholes)]
 	return data
 
+def config_parser(config):
+    tokens = str(config)
+    #print (type(tokens))
+    tokens = tokens.split(' ')
+    data = {}
+    data['MAP_WIDTH'] = float(tokens[2])
+    data['MAP_HEIGHT'] = float(tokens[4])
+    data['CAPTURERADIUS'] = float(tokens[6])
+    data['VISIONRADIUS'] = float(tokens[8])
+    data['FRICTION'] = float(tokens[10])
+    data['BRAKEFRICTION'] = float(tokens[12])
+    data['BOMBPLACERADIUS'] = float(tokens[14])
+    data['BOMBEFFECTRADIUS'] = float(tokens[16])
+    data['BOMBDELAY'] = float(tokens[18])
+    data['BOMBPOWER'] = float(tokens[20])
+    data['SCANRADIUS'] = float(tokens[22])
+    data['SCANDELAY'] = float(tokens[24][:-2])
+    return data
+
+
 def status(user,password):
 	try:
 		status = get_status(u,p)
@@ -31,10 +51,27 @@ def status(user,password):
 	except (IndexError, TimeoutError):
 		return
 
-if __name__ == '__main__':
+def move(user, password, angle, velocity):
+    angle = str(angle)
+    velocity = str(velocity)
+    run(user,password,'ACCELERATE '+angle+' '+velocity)
+    return 
 
+def brake(user, password):
+    run(user, password,'BRAKE')
+    return 
+
+def scan(data):
+    user_x = data['position'][0] 
+    user_y = data['position'][1] 
+    print(user_x,user_y)
+
+    return 
+
+if __name__ == '__main__':
 	u = 'BSOD'
 	p = 'Alboucai'
 	while True:
-		print(status(u,p))
-		time.sleep(2)
+            move(u,p,3.14/2,0.25+0.25)
+            print(status(u,p))
+            time.sleep(2)
