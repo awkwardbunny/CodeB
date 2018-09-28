@@ -1,14 +1,34 @@
 from clientpy3 import *
+import time
 
 def status_parser(status):
 	tokens = status.split(' ')
-	# return tokens
+	# print(tokens)
 	data = {}
 	data['position'] = (tokens[1],tokens[2])
 	data['velocity'] = (tokens[3],tokens[4])
 	num_mines = int(tokens[7])
 	data['num_mines'] = num_mines
-	data['mines'] = [(tokens[7+3*i+1],tokens[7+3*i+2],token[7+3*i+3]) for i in range(num_mines)]
+	data['mines'] = [tokens[7+3*i+1:7+3*i+4] for i in range(num_mines)]
+	pinfo_start = 7+3*num_mines+2
+	num_players = int(tokens[pinfo_start])
+	data['num_players'] = num_players
+	data['players'] = [tokens[pinfo_start+3*i+1:pinfo_start+3*i+4] for i in range(num_players)]
+	binfo_start = pinfo_start+3*num_players+2
+	num_bombs = int(tokens[binfo_start])
+	data['num_bombs'] = num_bombs
+	data['bombs'] = [tokens[binfo_start+3*i+1:binfo_start+3*i+4] for i in range(num_bombs)]
+	winfo_start = binfo_start+3*num_players+2
+	num_wormholes = int(tokens[winfo_start])
+	data['num_wormholes'] = num_wormholes
+	data['wormholes'] = [tokens[winfo_start+3*i+1:winfo_start+3*i+4] for i in range(num_wormholes)]
+	return data
+
+
+	
+
+	# ['STATUS_OUT', '7276.023480798129', '5000.0', '9.89995360272961', '0.0', '', 'MINES', '0', 'PLAYERS', '0', 'BOMBS', '0', 'WORMHOLES', '0']
+
 
 
 	return data
@@ -21,5 +41,6 @@ if __name__ == '__main__':
 		try:
 			status = get_status(u,p)
 			print(status_parser(status[0]))
-		except (IndexError):
+			time.sleep(5)
+		except (IndexError, TimeoutError):
 			pass
