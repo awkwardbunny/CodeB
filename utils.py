@@ -1,5 +1,7 @@
 from clientpy3 import *
 import time
+import random
+import math
 
 def status_parser(status):
 	tokens = status.split(' ')
@@ -25,7 +27,7 @@ def status_parser(status):
 	return data
 
 def config_parser(config):
-    tokens = str(config)
+    tokens = config[0]
     #print (type(tokens))
     tokens = tokens.split(' ')
     data = {}
@@ -40,7 +42,28 @@ def config_parser(config):
     data['BOMBDELAY'] = float(tokens[18])
     data['BOMBPOWER'] = float(tokens[20])
     data['SCANRADIUS'] = float(tokens[22])
-    data['SCANDELAY'] = float(tokens[24][:-2])
+    data['SCANDELAY'] = float(tokens[24])
+    return data
+
+def scan_parser(scan_data):
+    tokens = scan_data[0]
+    tokens = tokens.split(' ')
+    data = {}
+    num_mines = int(tokens[3])
+    data['mines'] = [tokens[3+3*i+1:3+3*i+4] for i in range(num_mines)]
+    pinfo_start = 3+3*num_mines+2
+    num_players = int(tokens[pinfo_start])
+
+    data['num_players'] = num_players
+    data['players'] = [tokens[pinfo_start+4*i+1:pinfo_start+4*i+5] for i in range(num_players)]
+    binfo_start = pinfo_start+4*num_players+2
+    num_bombs = int(tokens[binfo_start])
+    data['num_bombs'] = num_bombs
+    data['bombs'] = [tokens[binfo_start+3*i+1:binfo_start+3*i+4] for i in range(num_bombs)]
+    winfo_start = binfo_start+3*num_bombs+2
+    num_wormholes = int(tokens[winfo_start])
+    data['num_wormholes'] = num_wormholes
+    data['wormholes'] = [tokens[winfo_start+5*i+1:winfo_start+5*i+6] for i in range(num_wormholes)]
     return data
 
 
@@ -61,12 +84,16 @@ def brake(user, password):
     run(user, password,'BRAKE')
     return 
 
-def scan(data):
+def scan(user, password, data, dic):
     user_x = data['position'][0] 
     user_y = data['position'][1] 
-    print(user_x,user_y)
-
-    return 
+    randx = random.randint(0,dic['MAP_WIDTH']) 
+    randy = random.randint(0,dic['MAP_WIDTH']) 
+    
+    scan_x = str(math.floor((float(user_x) + randx) % dic['MAP_WIDTH']))
+    scan_y = str(math.floor((float(user_y) + randy) % dic['MAP_WIDTH']))
+    print(scan_x, scan_y)
+    return get_scan(user, password, scan_x, scan_y)
 
 if __name__ == '__main__':
 	u = 'BSOD'
