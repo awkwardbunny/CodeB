@@ -66,7 +66,6 @@ def scan_parser(scan_data):
     data['wormholes'] = [tokens[winfo_start+5*i+1:winfo_start+5*i+6] for i in range(num_wormholes)]
     return data
 
-
 def status(user,password):
 	try:
 		status = get_status(u,p)
