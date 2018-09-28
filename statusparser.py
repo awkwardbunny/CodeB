@@ -13,10 +13,13 @@ def status_parser(status):
 
 	return data
 
-u = 'BSOD'
-p = 'Alboucai'
-
 if __name__ == '__main__':
+
+	u = 'BSOD'
+	p = 'Alboucai'
 	while True:
-		status = get_status(u,p)
-		print(status_parser(status[0]))
+		try:
+			status = get_status(u,p)
+			print(status_parser(status[0]))
+		except (IndexError):
+			pass
