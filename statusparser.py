@@ -13,24 +13,15 @@ def status_parser(status):
 	pinfo_start = 7+3*num_mines+2
 	num_players = int(tokens[pinfo_start])
 	data['num_players'] = num_players
-	data['players'] = [tokens[pinfo_start+3*i+1:pinfo_start+3*i+4] for i in range(num_players)]
-	binfo_start = pinfo_start+3*num_players+2
+	data['players'] = [tokens[pinfo_start+4*i+1:pinfo_start+4*i+5] for i in range(num_players)]
+	binfo_start = pinfo_start+4*num_players+2
 	num_bombs = int(tokens[binfo_start])
 	data['num_bombs'] = num_bombs
 	data['bombs'] = [tokens[binfo_start+3*i+1:binfo_start+3*i+4] for i in range(num_bombs)]
-	winfo_start = binfo_start+3*num_players+2
+	winfo_start = binfo_start+3*num_bombs+2
 	num_wormholes = int(tokens[winfo_start])
 	data['num_wormholes'] = num_wormholes
-	data['wormholes'] = [tokens[winfo_start+3*i+1:winfo_start+3*i+4] for i in range(num_wormholes)]
-	return data
-
-
-	
-
-	# ['STATUS_OUT', '7276.023480798129', '5000.0', '9.89995360272961', '0.0', '', 'MINES', '0', 'PLAYERS', '0', 'BOMBS', '0', 'WORMHOLES', '0']
-
-
-
+	data['wormholes'] = [tokens[winfo_start+5*i+1:winfo_start+5*i+6] for i in range(num_wormholes)]
 	return data
 
 if __name__ == '__main__':
@@ -41,6 +32,6 @@ if __name__ == '__main__':
 		try:
 			status = get_status(u,p)
 			print(status_parser(status[0]))
-			time.sleep(5)
+			time.sleep(2)
 		except (IndexError, TimeoutError):
 			pass
