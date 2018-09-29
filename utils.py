@@ -43,10 +43,9 @@ def config_parser(config):
     data['SCANDELAY'] = float(tokens[24][:-2])
     return data
 
-
 def status(user,password):
 	try:
-		status = get_status(u,p)
+		status = get_status(user,password)
 		return status_parser(status[0])
 	except (IndexError, TimeoutError):
 		return
