@@ -33,8 +33,18 @@ class Bot:
 
         # Loop
         signal.signal(signal.SIGINT, self.sigint_handler)
+        count = 0
         while self.running:
-
+            count +=1
+            if count%100 == 0:
+                c.send('BRAKE')
+                time.sleep(0.1)
+                c.send('BRAKE')
+                time.sleep(0.1)
+                c.send('BRAKE')
+                time.sleep(0.1)
+                c.send('BRAKE')
+                time.sleep(0.1)
             # Get board data from websocket
             db = c.get_ws_data()
 
@@ -43,16 +53,16 @@ class Bot:
             #for mine in db['mines']:
             #    print(mine)
 
+            # Get current player position
             p_pos = {}
             for p in db['players']:
                 if p['name'] == user:
                     p_pos = (p['px'], p['py'])
                     break
 
-
-            closest_mine = get_closest_mine(db['mines'], p_pos, (config['MAPHEIGHT'],config['MAPWIDTH']), user)
+            closest_mine = get_closest_mine(db['mines'], p_pos, (config['MAPWIDTH'],config['MAPHEIGHT']), user)
             print(closest_mine)
-            #move_to(closest_mine)
+            move_to(c, p_pos, (closest_mine['px'],closest_mine['py']), (config['MAPWIDTH'],config['MAPHEIGHT']))
 
         # Close
         print('Terminating')

@@ -2,6 +2,7 @@ from clientpy3 import *
 import time
 import random
 import math
+import numpy as np
 
 def status_parser(status):
     tokens = status.split(' ')
@@ -60,12 +61,25 @@ def get_closest_mine(mines, p_pos, dim, user):
     return closest
 
 def calc_d(p,m,d):
-    #points = [(x1+dimx*i,y1+dimy*j) for i in [-1,0,1] for j in [-1,0,1]]
-    #min_dist = -1
-    #for point in points:
-    #    dist = math.sqrt((x0-point[0])**2+(y0-point[1])**2)
-    #    if (min_dist < 0 or dist < min_dist):
-    #        min_dist = dist
-    #return min_dist
-    return 0
+    min_dist = 100000000
+    points = [(p[0]+d[0]*i,p[1]+d[1]*j) for i in [-1,0,1] for j in [-1,0,1]]
+    for point in points:
+        dist = (m[0]-point[0])**2+(m[1]-point[1])**2
+        if dist < min_dist:
+            min_dist = dist
+    return min_dist
 
+def move_to(c,p,m,d):
+    points = [(m[0]+d[0]*i,m[1]+d[1]*j) for i in [-1,0,1] for j in [-1,0,1]]
+    min_dist = -1
+    for point in points:
+        dist = (p[0]-point[0])**2+(p[1]-point[1])**2
+        if (min_dist < 0 or dist < min_dist):
+            min_dist = dist
+            min_point = point
+    x,y = min_point
+
+    if ((math.sqrt((x-p[0])**2+(y-p[1])**2)) <= 300):
+       c.send('BRAKE') 
+
+    c.send('ACCELERATE ' + str(np.sign(x-p[0])*math.acos((x-p[0])/(math.sqrt((x-p[0])**2+(y-p[1])**2)))) + " " + str(min(0.5,math.sqrt((x-p[0])**2+(y-p[1])**2))))
