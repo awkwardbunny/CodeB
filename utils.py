@@ -101,8 +101,8 @@ def scan(user, password, data, dic):
 	randx = random.randint(0,dic['MAP_WIDTH']) 
 	randy = random.randint(0,dic['MAP_WIDTH']) 
 	
-	scan_x = str(math.floor((float(user_x) + randx) % dic['MAP_WIDTH']))
-	scan_y = str(math.floor((float(user_y) + randy) % dic['MAP_WIDTH']))
+	scan_x = str(math.floor((randx) % dic['MAP_WIDTH']))
+	scan_y = str(math.floor((randy) % dic['MAP_WIDTH']))
 	#print('scanning: ', scan_x, scan_y)
 	return get_scan(user, password, scan_x, scan_y)
 

@@ -11,7 +11,7 @@ def min_dist(x0,y0,x1,y1,dimx,dimy):
 			min_dist = dist
 	return min_dist
 
-def get_path(x0,y0,x,y,dx,dy,dimx,dimy):
+def get_path(x0,y0,x,y,dx,dy,dimx,dimy,braking):
 	# ideal_vec = np.array([x-x0,y-y0])
 	velocity =	 0#np.array([dx,dy])
 	points = [(x+dimx*i,y+dimy*j) for i in [-1,0,1] for j in [-1,0,1]]
@@ -31,8 +31,8 @@ def get_path(x0,y0,x,y,dx,dy,dimx,dimy):
 	return min(1,np.linalg.norm(fin_vel)),np.sign(fin_vel[0])*np.arccos(fin_vel[0]/(np.linalg.norm(fin_vel)+.00001))
 
 def exec_move(user,password,x,y):
-	# while (np.linalg.norm(np.array(status(user,password)['velocity'])) > 5) :
-	# 	brake(user,password)
+	while (np.linalg.norm(np.array(status(user,password)['velocity'])) > 5) :
+		brake(user,password)
 	config = None
 	braking = False
 	while (config is None):
@@ -58,13 +58,13 @@ def exec_move(user,password,x,y):
 					break
 			
 			if not avoid_worm:
-				accel = get_path(float(pos[0]),float(pos[1]),x,y,float(vel[0]),float(vel[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT']))
+				accel = get_path(float(pos[0]),float(pos[1]),x,y,float(vel[0]),float(vel[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT']),braking)
 			# print(stats['position'],accel[0])
 			move(user,password,accel[1],accel[0])
-			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < 100 and not braking	):
-				for _ in range(5):
+			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < 200 and not braking):
+				while (np.linalg.norm(np.array(status(user,password)['velocity'])) > .005):
 					brake(user,password)
-				braking = True
+				braking	= True	
 
 			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < float(config['CAPTURERADIUS']) + 5):
 				break
