@@ -44,5 +44,5 @@ while True:
                 mine_x, mine_y = output['mines'][0][1], output['mines'][0][2]
                 mine_db[mine_x+mine_y] = (mine_x, mine_y)
                 print('mine scanned: ', mine_db[mine_x+mine_y])
-    except (IndexError, TypeError):
+    except IndexError:
         continue
