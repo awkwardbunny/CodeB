@@ -61,10 +61,6 @@ def exec_move(user,password,x,y):
 				break
 	
 
-
-
-
-
 if __name__ == '__main__':
 	exec_move('BSOD','Alboucai',500,500)
 	exec_move('BSOD','Alboucai',5000,5000)
