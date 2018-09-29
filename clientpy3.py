@@ -1,60 +1,38 @@
 import socket
 import sys
+import websocket
+import json
 
-def run(user, password, * commands):
-    HOST, PORT = "codebb.cloudapp.net", 17429
-    data = user + " " + password + "\n" + "\n".join(commands) + "\nCLOSE_CONNECTION\n"
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+class BIClient:
+    socket = None
+    wsocket = None
 
-        sock.connect((HOST, PORT))
-        sock.sendall(bytes(data, "utf-8"))
-        sfile = sock.makefile()
-        rline = sfile.readline()
-        while rline:
-            rline = sfile.readline()
+    def __init__(self):
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.wsocket = websocket.WebSocket()
 
-def get_status(user, password):
-    HOST, PORT = "codebb.cloudapp.net", 17429
-    data = user + " " + password + "\n" + 'STATUS' + "\nCLOSE_CONNECTION\n"
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        output = []
-        sock.connect((HOST, PORT))
-        sock.sendall(bytes(data, "utf-8"))
-        sfile = sock.makefile()
-        rline = sfile.readline()
-        while rline:
-            output += [rline.strip()]
-            rline = sfile.readline()
-    return output
+    def get_ws_data(self):
+        return json.loads(self.wsocket.recv())
 
-def get_config(user, password):
-    HOST, PORT = "codebb.cloudapp.net", 17429
-    data = user + " " + password + "\n" + 'CONFIGURATIONS' + "\nCLOSE_CONNECTION\n"
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        output = []
-        sock.connect((HOST, PORT))
-        sock.sendall(bytes(data, "utf-8"))
-        sfile = sock.makefile()
-        rline = sfile.readline()
-        while rline:
-            output += [rline.strip()]
-            rline = sfile.readline()
-    return output
+    def connect(self, host, port):
+        self.socket.connect((host, port))
+        print('Client connected.')
+        self.wsocket.connect("ws://codebb.cloudapp.net:17427")
+        print('Websocket connected.')
 
-def get_scan(user, password, x, y):
-    HOST, PORT = "codebb.cloudapp.net", 17429
-    data = user + " " + password + "\n" + 'SCAN' + " " + x + " " + y + "\nCLOSE_CONNECTION\n"
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-        output = []
-        sock.connect((HOST, PORT))
-        sock.sendall(bytes(data, "utf-8"))
-        sfile = sock.makefile()
-        rline = sfile.readline()
-        while rline:
-            output += [rline.strip()]
-            rline = sfile.readline()
-    return output
+    def send(self, command, wait = True):
+        self.socket.sendall(bytes(command+"\n", "utf-8"))
+        if wait:
+            return self.socket.recv(1024).decode("utf-8").strip()
 
+    def login(self, user, password):
+        return self.send(user + " " + password, wait = False)
+
+    def close(self):
+        res = self.send("CLOSE_CONNECTION", wait = False)
+        self.socket.close()
+        print('Client closed.')
+        return res
     
 def subscribe(user, password):
     HOST, PORT = "codebb.cloudapp.net", 17429
@@ -66,3 +44,4 @@ def subscribe(user, password):
         rline = sfile.readline()
         while rline:
             rline = sfile.readline()
+
