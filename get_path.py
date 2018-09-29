@@ -1,6 +1,4 @@
-import numpy as np
 from utils import *
-import pdb
 import math
 
 def min_dist(x0,y0,x1,y1,dimx,dimy):
