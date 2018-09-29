@@ -28,7 +28,7 @@ def get_path(x0,y0,x,y,dx,dy,dimx,dimy):
 
 	fin_vel = (ideal_vec - velocity)
 
-	return (min(1,np.sqrt((x0-x)**2+(y-y0)**2)/(175*np.sqrt(dx**2+dy**2))),np.sign(fin_vel[0])*np.arccos(fin_vel[0]/(np.linalg.norm(fin_vel)+.00001)),fin_vel) 
+	return min(1,np.linalg.norm(fin_vel)),np.sign(fin_vel[0])*np.arccos(fin_vel[0]/(np.linalg.norm(fin_vel)+.00001))
 
 def exec_move(user,password,x,y):
 	# while (np.linalg.norm(np.array(status(user,password)['velocity'])) > 5) :
@@ -40,7 +40,7 @@ def exec_move(user,password,x,y):
 		else:
 			pos = stats['position']
 			vel = stats['velocity']
-			wormholes = stats['wormholes']
+			wormholes = []
 			avoid_worm = False
 			config = config_parser(get_config(user,password))
 			for wormhole in wormholes:
@@ -49,7 +49,7 @@ def exec_move(user,password,x,y):
 				r = float(wormhole[2])
 				if (min_dist(float(pos[0]),float(pos[1]),wx,wy,float(config['MAP_WIDTH']),float(config['MAP_HEIGHT']))) < 10*r:
 					accel_x_y = (wy-y,-wx+x)
-					accel = (1,np.sign(wy-y)*np.arccos((wy-y)/(np.sqrt((wy-y)**2+(-wx+x)**2)+.00001)))
+					accel = (1,np.sign(wy-y)*np.arccos((wy-y)/(np.sqrt((wy-y)**2+(-wx+x)**2)+.001)))
 					avoid_worm = True
 					break
 			
@@ -57,7 +57,7 @@ def exec_move(user,password,x,y):
 				accel = get_path(float(pos[0]),float(pos[1]),x,y,float(vel[0]),float(vel[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT']))
 			# print(stats['position'],accel[0])
 			move(user,password,accel[1],accel[0])
-			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < 50):
+			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < float(config['CAPTURERADIUS'])+.1):
 				break
 	
 
