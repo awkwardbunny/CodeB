@@ -33,6 +33,11 @@ def get_path(x0,y0,x,y,dx,dy,dimx,dimy):
 def exec_move(user,password,x,y):
 	# while (np.linalg.norm(np.array(status(user,password)['velocity'])) > 5) :
 	# 	brake(user,password)
+	config = None
+
+	while (config is None):
+		config = config_parser(get_config(user,password))
+
 	while True:
 		stats = status(user,password)
 		if stats is None:
@@ -42,7 +47,6 @@ def exec_move(user,password,x,y):
 			vel = stats['velocity']
 			wormholes = []
 			avoid_worm = False
-			config = config_parser(get_config(user,password))
 			for wormhole in wormholes:
 				wx = float(wormhole[0])
 				wy = float(wormhole[1])
