@@ -31,9 +31,10 @@ class scanner(threading.Thread):
 						wh_mutex.acquire()
 						self._wormholes[wormhole[0]+' '+wormhole[1]] = wormhole
 						wh_mutex.release()
-				scan = utils.scan_parser(utils.scan(self._user,self._pass,status,self._config))
-				if scan is not None:
-					mines = scan['mines']
+				scanned = utils.scan_parser(utils.scan(self._user,self._pass,status,self._config))
+				if scanned is not None:
+                                        
+					mines = scanned['mines']
 					for mine in mines:
 						# print(mine)
 						if mine[1]+' '+mine[2] not in self.mines:
@@ -41,7 +42,7 @@ class scanner(threading.Thread):
 							mine_mutex.acquire()
 							self._mines[mine[1]+' '+mine[2]] = (time.time()-30,mine[0])
 							mine_mutex.release()
-					wormholes = scan['wormholes']
+					wormholes = scanned['wormholes']
 					for wormhole in wormholes:
 						if wormhole[0]+' '+wormhole[1] not in self.wormholes:
 							wh_mutex.acquire()
