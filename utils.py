@@ -45,3 +45,27 @@ def move(client, angle, velocity):
 
 def brake(client):
     client.send('BRAKE')
+
+def get_closest_mine(mines, p_pos, dim, user):
+
+    closest = None
+    closest_d = 10000000000
+    for mine in mines:
+        if mine['owner'] == user:
+            continue
+        d = calc_d(p_pos,(mine['px'],mine['py']),dim)
+        if d < closest_d:
+            closest_d = d
+            closest = mine
+    return closest
+
+def calc_d(p,m,d):
+    #points = [(x1+dimx*i,y1+dimy*j) for i in [-1,0,1] for j in [-1,0,1]]
+    #min_dist = -1
+    #for point in points:
+    #    dist = math.sqrt((x0-point[0])**2+(y0-point[1])**2)
+    #    if (min_dist < 0 or dist < min_dist):
+    #        min_dist = dist
+    #return min_dist
+    return 0
+
