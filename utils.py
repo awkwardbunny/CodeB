@@ -53,14 +53,12 @@ def config_parser(config):
 	return data
 
 def scan_parser(scan_data):
-<<<<<<< HEAD
     if (scan_data == ['ERROR Scanning too soon']):
        return 0
     tokens = scan_data[0]
     tokens = tokens.split(' ')
     data = {}
     num_mines = int(tokens[3])
-    print(num_mines)
     data['mines'] = [tokens[3+3*i+1:3+3*i+4] for i in range(num_mines)]
     pinfo_start = 3+3*num_mines+2
     num_players = int(tokens[pinfo_start])
@@ -101,6 +99,7 @@ def scan(user, password, data, dic):
     
     scan_x = str(math.floor((float(user_x) + randx) % dic['MAP_WIDTH']))
     scan_y = str(math.floor((float(user_y) + randy) % dic['MAP_WIDTH']))
+    #print('scanning: ', scan_x, scan_y)
     return get_scan(user, password, scan_x, scan_y)
 
 if __name__ == '__main__':
