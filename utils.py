@@ -54,13 +54,14 @@ def config_parser(config):
 
 def scan_parser(scan_data):
 	if (scan_data == ['ERROR Scanning too soon']):
-		return
+            return
 	try:
-		tokens = scan_data[0]
+            tokens = scan_data[0]
 	except (IndexError):
-		return 
-	tokens = tokens.split(' ')
-	data = {}
+            return 
+        tokens = tokens.split(' ')
+        data = {}
+        print(tokens)
 	num_mines = int(tokens[3])
 	data['mines'] = [tokens[3+3*i+1:3+3*i+4] for i in range(num_mines)]
 	pinfo_start = 3+3*num_mines+2
