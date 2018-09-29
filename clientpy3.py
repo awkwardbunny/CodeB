@@ -11,7 +11,6 @@ def run(user, password, * commands):
         sfile = sock.makefile()
         rline = sfile.readline()
         while rline:
-            print(rline.strip())
             rline = sfile.readline()
 
 def get_status(user, password):
@@ -66,5 +65,4 @@ def subscribe(user, password):
         sfile = sock.makefile()
         rline = sfile.readline()
         while rline:
-            print(rline.strip())
             rline = sfile.readline()
