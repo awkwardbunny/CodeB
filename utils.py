@@ -53,7 +53,6 @@ def config_parser(config):
 	return data
 
 def scan_parser(scan_data):
-<<<<<<< HEAD
     if (scan_data == ['ERROR Scanning too soon']):
        return 0
     tokens = scan_data[0]
