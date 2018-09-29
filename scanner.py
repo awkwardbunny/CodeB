@@ -46,20 +46,17 @@ class scanner(threading.Thread):
 							mine_mutex.acquire()
 							self._mines[mine[1]+' '+mine[2]] = (time.time()-30,mine[0])
 							mine_mutex.release()
-<<<<<<< HEAD
-					wormholes = scanned['wormholes']
-=======
 						else:
 							mine_mutex.acquire()
 							self._mines[mine[1]+' '+mine[2]] = (self._mines[mine[1]+' '+mine[2]],mine[0])
 							mine_mutex.release()
-					wormholes = scan['wormholes']
->>>>>>> 3acceab1816417476f78b0a826570b03928f3ac7
+					wormholes = scanned['wormholes']
 					for wormhole in wormholes:
 						if wormhole[0]+' '+wormhole[1] not in self.wormholes:
 							wh_mutex.acquire()
 							self._wormholes[wormhole[0]+' '+wormhole[1]] = wormhole
 							wh_mutex.release()
+				time.sleep(.1)
 
 			if self._stop_event.is_set():
 				return

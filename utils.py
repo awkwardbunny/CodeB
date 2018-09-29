@@ -54,14 +54,14 @@ def config_parser(config):
 
 def scan_parser(scan_data):
 	if (scan_data == ['ERROR Scanning too soon']):
-            return
+		return
 	try:
-            tokens = scan_data[0]
+		tokens = scan_data[0]
 	except (IndexError):
-            return 
-        tokens = tokens.split(' ')
-        data = {}
-        print(tokens)
+		return 
+	tokens = tokens.split(' ')
+	data = {}
+	# print(tokens)
 	num_mines = int(tokens[3])
 	data['mines'] = [tokens[3+3*i+1:3+3*i+4] for i in range(num_mines)]
 	pinfo_start = 3+3*num_mines+2
@@ -110,6 +110,6 @@ if __name__ == '__main__':
 	u = 'BSOD'
 	p = 'Alboucai'
 	while True:
-			move(u,p,3.14/2,0.25+0.25)
-			print(status(u,p))
-			time.sleep(2)
+		move(u,p,3.14/2,0.25+0.25)
+		print(status(u,p))
+		time.sleep(2)

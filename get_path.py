@@ -34,7 +34,7 @@ def exec_move(user,password,x,y):
 	# while (np.linalg.norm(np.array(status(user,password)['velocity'])) > 5) :
 	# 	brake(user,password)
 	config = None
-
+	braking = False
 	while (config is None):
 		config = config_parser(get_config(user,password))
 
@@ -61,7 +61,12 @@ def exec_move(user,password,x,y):
 				accel = get_path(float(pos[0]),float(pos[1]),x,y,float(vel[0]),float(vel[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT']))
 			# print(stats['position'],accel[0])
 			move(user,password,accel[1],accel[0])
-			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < float(config['CAPTURERADIUS'])+.1):
+			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < 100 and not braking	):
+				for _ in range(5):
+					brake(user,password)
+				braking = True
+
+			if (min_dist(x,y,float(pos[0]),float(pos[1]),float(config['MAP_WIDTH']),float(config['MAP_HEIGHT'])) < float(config['CAPTURERADIUS']) + 5):
 				break
 	
 

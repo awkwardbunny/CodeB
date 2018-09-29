@@ -24,14 +24,17 @@ def status_parser(status):
 	data['wormholes'] = [tokens[winfo_start+5*i+1:winfo_start+5*i+6] for i in range(num_wormholes)]
 	return data
 
+def status(user,password):
+	try:
+		status = get_status(u,p)
+		return status_parser(status[0])
+	except (IndexError, TimeoutError):
+		return
+
 if __name__ == '__main__':
 
 	u = 'BSOD'
 	p = 'Alboucai'
 	while True:
-		try:
-			status = get_status(u,p)
-			print(status_parser(status[0]))
-			time.sleep(2)
-		except (IndexError, TimeoutError):
-			pass
+		print(status(u,p))
+		time.sleep(2)
