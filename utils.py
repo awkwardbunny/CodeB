@@ -82,4 +82,4 @@ def move_to(c,p,m,d):
     if ((math.sqrt((x-p[0])**2+(y-p[1])**2)) <= 300):
        c.send('BRAKE') 
 
-    c.send('ACCELERATE ' + str(np.sign(x-p[0])*math.acos((x-p[0])/(math.sqrt((x-p[0])**2+(y-p[1])**2)))) + " " + str(min(0.5,math.sqrt((x-p[0])**2+(y-p[1])**2))))
+    c.send('ACCELERATE ' + str((-1*(math.atan(((y-p[1])/(x-p[0])))))%(2*math.pi)) + " " + str(min(0.5,math.sqrt((x-p[0])**2+(y-p[1])**2))))

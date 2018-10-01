@@ -21,6 +21,7 @@ class BIClient:
         print('Websocket connected.')
 
     def send(self, command, wait = True):
+        print(command)
         self.socket.sendall(bytes(command+"\n", "utf-8"))
         if wait:
             return self.socket.recv(1024).decode("utf-8").strip()

@@ -6,6 +6,8 @@ import time
 import sys,signal
 import websocket
 import json
+import readchar
+import math
 
 class Bot:
     running = True
@@ -33,18 +35,8 @@ class Bot:
 
         # Loop
         signal.signal(signal.SIGINT, self.sigint_handler)
-        count = 0
         while self.running:
-            count +=1
-            if count%100 == 0:
-                c.send('BRAKE')
-                time.sleep(0.1)
-                c.send('BRAKE')
-                time.sleep(0.1)
-                c.send('BRAKE')
-                time.sleep(0.1)
-                c.send('BRAKE')
-                time.sleep(0.1)
+
             # Get board data from websocket
             db = c.get_ws_data()
 
@@ -61,8 +53,23 @@ class Bot:
                     break
 
             closest_mine = get_closest_mine(db['mines'], p_pos, (config['MAPWIDTH'],config['MAPHEIGHT']), user)
-            print(closest_mine)
-            move_to(c, p_pos, (closest_mine['px'],closest_mine['py']), (config['MAPWIDTH'],config['MAPHEIGHT']))
+            #print(closest_mine)
+            #move_to(c, p_pos, (closest_mine['px'],closest_mine['py']), (config['MAPWIDTH'],config['MAPHEIGHT']))
+
+            ch = readchar.readchar()
+            print(ch)
+            if ch == 'k':
+                c.send('ACCELERATE ' + str(3*math.pi/2) + ' 1')
+            if ch == 'h':
+                c.send('ACCELERATE ' + str(math.pi) + ' 1')
+            if ch == 'l':
+                c.send('ACCELERATE 0 1')
+            if ch == ' ':
+                c.send('ACCELERATE ' + str(math.pi/2) + ' 0')
+            if ch == 'j':
+                c.send('ACCELERATE ' + str(math.pi/2) + ' 1')
+            if ch == 'x':
+                self.running = False
 
         # Close
         print('Terminating')
